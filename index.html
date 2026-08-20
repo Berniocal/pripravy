@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light" />
+  <title>Přípravy | Bernio</title>
+  <meta name="description" content="Přehled výukových příprav z matematiky a fyziky." />
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --surface: #ffffff;
+      --surface-2: #f8fafc;
+      --text: #172033;
+      --muted: #667085;
+      --line: #e7eaf0;
+      --primary: #5b47e0;
+      --primary-2: #715cf0;
+      --primary-soft: #efedff;
+      --physics: #6d4aff;
+      --math: #0a8f6a;
+      --shadow: 0 10px 30px rgba(31, 42, 68, .08);
+      --radius: 20px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(91,71,224,.10), transparent 32rem),
+        var(--bg);
+    }
+
+    button, input, select { font: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+
+    .shell { width: min(1180px, calc(100% - 32px)); margin: 0 auto; }
+
+    header { padding: 54px 0 24px; }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 11px;
+      border-radius: 999px;
+      background: var(--primary-soft);
+      color: var(--primary);
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 14px 0 8px; font-size: clamp(36px, 6vw, 58px); line-height: 1; letter-spacing: -.045em; }
+    .lead { margin: 0; color: var(--muted); font-size: 18px; max-width: 720px; line-height: 1.55; }
+
+    .toolbar {
+      position: sticky;
+      top: 12px;
+      z-index: 10;
+      margin: 20px 0 24px;
+      padding: 14px;
+      border: 1px solid rgba(231,234,240,.9);
+      border-radius: 24px;
+      background: rgba(255,255,255,.90);
+      backdrop-filter: blur(16px);
+      box-shadow: var(--shadow);
+    }
+
+    .toolbar-top { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; }
+    .search { position: relative; }
+    .search svg { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); width: 20px; height: 20px; color: #98a2b3; }
+    .search input, select {
+      width: 100%;
+      height: 48px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--surface);
+      color: var(--text);
+      outline: none;
+      transition: .2s ease;
+    }
+    .search input { padding: 0 16px 0 46px; }
+    select { min-width: 190px; padding: 0 38px 0 14px; cursor: pointer; }
+    .search input:focus, select:focus { border-color: rgba(91,71,224,.55); box-shadow: 0 0 0 4px rgba(91,71,224,.10); }
+
+    .filters { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+    .chip {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 9px 13px;
+      background: var(--surface);
+      color: #475467;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 14px;
+      transition: .18s ease;
+    }
+    .chip:hover { transform: translateY(-1px); border-color: #c9c3ff; }
+    .chip.active { color: white; background: var(--primary); border-color: var(--primary); box-shadow: 0 5px 16px rgba(91,71,224,.22); }
+    .chip.subject-math.active { background: var(--math); border-color: var(--math); box-shadow: 0 5px 16px rgba(10,143,106,.20); }
+
+    .result-row { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin: 6px 2px 14px; color: var(--muted); font-size: 14px; }
+    .clear {
+      border: 0;
+      background: transparent;
+      color: var(--primary);
+      font-weight: 800;
+      cursor: pointer;
+      padding: 6px;
+    }
+
+    .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; padding-bottom: 60px; }
+    .card {
+      display: flex;
+      flex-direction: column;
+      min-height: 245px;
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      box-shadow: 0 4px 16px rgba(31,42,68,.045);
+      transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+    }
+    .card:hover { transform: translateY(-3px); box-shadow: var(--shadow); border-color: #dcd8ff; }
+    .card-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 20px; }
+    .subject {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: #f1efff;
+      color: var(--physics);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: .045em;
+      text-transform: uppercase;
+    }
+    .subject.math { background: #eaf8f3; color: var(--math); }
+    .grade { color: #667085; background: var(--surface-2); padding: 7px 10px; border-radius: 999px; font-size: 12px; font-weight: 800; }
+    .card h2 { margin: 0; font-size: 22px; letter-spacing: -.025em; line-height: 1.2; }
+    .meta { margin: 8px 0 0; color: var(--muted); font-size: 14px; line-height: 1.5; }
+    .tags { display: flex; gap: 6px; flex-wrap: wrap; margin: 16px 0 20px; }
+    .tag { font-size: 12px; color: #667085; padding: 5px 8px; background: #f7f8fa; border-radius: 8px; }
+    .actions { margin-top: auto; display: flex; gap: 8px; }
+    .open {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      min-height: 44px;
+      padding: 10px 14px;
+      border-radius: 12px;
+      background: var(--primary);
+      color: #fff;
+      text-decoration: none;
+      font-weight: 850;
+      transition: .18s ease;
+    }
+    .open:hover { background: var(--primary-2); transform: translateY(-1px); }
+    .open svg { width: 17px; height: 17px; }
+
+    .empty { grid-column: 1 / -1; text-align: center; padding: 64px 20px; border: 1px dashed #d5d9e2; border-radius: var(--radius); color: var(--muted); background: rgba(255,255,255,.55); }
+    .empty strong { display: block; color: var(--text); font-size: 20px; margin-bottom: 6px; }
+
+    footer { padding: 10px 0 40px; text-align: center; color: #98a2b3; font-size: 13px; }
+
+    @media (max-width: 900px) { .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    @media (max-width: 650px) {
+      .shell { width: min(100% - 22px, 1180px); }
+      header { padding-top: 34px; }
+      .lead { font-size: 16px; }
+      .toolbar { top: 6px; padding: 10px; border-radius: 18px; }
+      .toolbar-top { grid-template-columns: 1fr; }
+      select { min-width: 0; }
+      .filters { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 3px; scrollbar-width: none; }
+      .filters::-webkit-scrollbar { display: none; }
+      .chip { flex: 0 0 auto; }
+      .grid { grid-template-columns: 1fr; }
+      .card { min-height: 220px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header>
+      <div class="eyebrow">Bernio · výukové materiály</div>
+      <h1>Přípravy</h1>
+      <p class="lead">Přehled příprav z matematiky a fyziky. Vyhledej téma, vyber předmět nebo ročník a otevři aktuální materiály přímo z OneDrivu.</p>
+    </header>
+
+    <main>
+      <section class="toolbar" aria-label="Filtrování příprav">
+        <div class="toolbar-top">
+          <label class="search" aria-label="Vyhledávání">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.7-3.7"></path></svg>
+            <input id="search" type="search" placeholder="Hledat téma, klíčové slovo…" autocomplete="off" />
+          </label>
+          <select id="sort" aria-label="Řazení">
+            <option value="order">Řazení: podle pořadí</option>
+            <option value="az">Název: A–Z</option>
+            <option value="za">Název: Z–A</option>
+            <option value="grade">Podle ročníku</option>
+            <option value="subject">Podle předmětu</option>
+          </select>
+        </div>
+
+        <div class="filters" id="subjects" aria-label="Předmět">
+          <button class="chip active" data-subject="all">Všechny předměty</button>
+          <button class="chip" data-subject="Fyzika">Fyzika</button>
+          <button class="chip subject-math" data-subject="Matematika">Matematika</button>
+        </div>
+
+        <div class="filters" id="grades" aria-label="Ročník">
+          <button class="chip active" data-grade="all">Všechny ročníky</button>
+          <button class="chip" data-grade="6. ZŠ">6. ZŠ</button>
+          <button class="chip" data-grade="7. ZŠ">7. ZŠ</button>
+          <button class="chip" data-grade="8. ZŠ">8. ZŠ</button>
+          <button class="chip" data-grade="9. ZŠ">9. ZŠ</button>
+          <button class="chip" data-grade="1. SŠ">1. SŠ</button>
+          <button class="chip" data-grade="2. SŠ">2. SŠ</button>
+          <button class="chip" data-grade="3. SŠ">3. SŠ</button>
+          <button class="chip" data-grade="4. SŠ">4. SŠ</button>
+        </div>
+      </section>
+
+      <div class="result-row">
+        <span id="count" aria-live="polite"></span>
+        <button class="clear" id="clear" hidden>Zrušit filtry</button>
+      </div>
+
+      <section class="grid" id="grid" aria-label="Seznam příprav"></section>
+    </main>
+
+    <footer>Bernio.cz · materiály se otevírají z veřejně sdílených složek OneDrive</footer>
+  </div>
+
+  <script>
+    // Novou přípravu stačí přidat jako další objekt do tohoto pole.
+    const preparations = [
+      {
+        order: 1,
+        title: "01 – Fyzikální jednotky",
+        subject: "Fyzika",
+        grade: "6. ZŠ",
+        description: "Přípravy a materiály k fyzikálním veličinám a jednotkám.",
+        tags: ["jednotky", "fyzikální veličiny", "SI"],
+        type: "Složka OneDrive",
+        url: "https://gyby-my.sharepoint.com/:f:/g/personal/jan_bernard_gyby_cz/IgBSH0t9jQfmTq0fa5YLJfuWAaWk4Kh88j4pZl6DOXNJOyo?e=N2xF6V"
+      }
+    ];
+
+    const gradeOrder = ["6. ZŠ", "7. ZŠ", "8. ZŠ", "9. ZŠ", "1. SŠ", "2. SŠ", "3. SŠ", "4. SŠ"];
+    const state = { subject: "all", grade: "all", query: "", sort: "order" };
+
+    const grid = document.getElementById("grid");
+    const count = document.getElementById("count");
+    const search = document.getElementById("search");
+    const sort = document.getElementById("sort");
+    const clear = document.getElementById("clear");
+
+    const normalize = value => value.toLocaleLowerCase("cs-CZ").normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+    function filteredItems() {
+      const q = normalize(state.query.trim());
+      const items = preparations.filter(item => {
+        const matchesSubject = state.subject === "all" || item.subject === state.subject;
+        const matchesGrade = state.grade === "all" || item.grade === state.grade;
+        const haystack = normalize([item.title, item.subject, item.grade, item.description, ...(item.tags || [])].join(" "));
+        const matchesQuery = !q || haystack.includes(q);
+        return matchesSubject && matchesGrade && matchesQuery;
+      });
+
+      return items.sort((a, b) => {
+        if (state.sort === "az") return a.title.localeCompare(b.title, "cs");
+        if (state.sort === "za") return b.title.localeCompare(a.title, "cs");
+        if (state.sort === "grade") return gradeOrder.indexOf(a.grade) - gradeOrder.indexOf(b.grade) || a.order - b.order;
+        if (state.sort === "subject") return a.subject.localeCompare(b.subject, "cs") || a.order - b.order;
+        return a.order - b.order;
+      });
+    }
+
+    function card(item) {
+      const subjectClass = item.subject === "Matematika" ? " math" : "";
+      const tags = (item.tags || []).map(tag => `<span class="tag">${escapeHtml(tag)}</span>`).join("");
+      return `
+        <article class="card">
+          <div class="card-top">
+            <span class="subject${subjectClass}">${escapeHtml(item.subject)}</span>
+            <span class="grade">${escapeHtml(item.grade)}</span>
+          </div>
+          <h2>${escapeHtml(item.title)}</h2>
+          <p class="meta">${escapeHtml(item.description)}</p>
+          <div class="tags">${tags}</div>
+          <div class="actions">
+            <a class="open" href="${item.url}" target="_blank" rel="noopener noreferrer">
+              Otevřít složku
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 17 17 7"></path><path d="M7 7h10v10"></path></svg>
+            </a>
+          </div>
+        </article>`;
+    }
+
+    function escapeHtml(value) {
+      return String(value).replace(/[&<>'"]/g, char => ({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;",'"':"&quot;"}[char]));
+    }
+
+    function render() {
+      const items = filteredItems();
+      grid.innerHTML = items.length
+        ? items.map(card).join("")
+        : `<div class="empty"><strong>Nic jsem nenašel</strong>Zkus jiný výraz nebo zruš některý filtr.</div>`;
+
+      const total = preparations.length;
+      count.textContent = `Zobrazeno ${items.length} z ${total} ${total === 1 ? "přípravy" : "příprav"}`;
+      clear.hidden = state.subject === "all" && state.grade === "all" && !state.query && state.sort === "order";
+    }
+
+    function bindChips(containerId, key, dataKey) {
+      document.getElementById(containerId).addEventListener("click", event => {
+        const button = event.target.closest("button[data-" + dataKey + "]");
+        if (!button) return;
+        state[key] = button.dataset[dataKey];
+        document.querySelectorAll(`#${containerId} .chip`).forEach(el => el.classList.toggle("active", el === button));
+        render();
+      });
+    }
+
+    bindChips("subjects", "subject", "subject");
+    bindChips("grades", "grade", "grade");
+
+    search.addEventListener("input", () => { state.query = search.value; render(); });
+    sort.addEventListener("change", () => { state.sort = sort.value; render(); });
+    clear.addEventListener("click", () => {
+      Object.assign(state, { subject: "all", grade: "all", query: "", sort: "order" });
+      search.value = "";
+      sort.value = "order";
+      document.querySelectorAll("#subjects .chip").forEach(el => el.classList.toggle("active", el.dataset.subject === "all"));
+      document.querySelectorAll("#grades .chip").forEach(el => el.classList.toggle("active", el.dataset.grade === "all"));
+      render();
+    });
+
+    render();
+  </script>
+</body>
+</html>

@@ -35,7 +35,7 @@
     <header>
       <div class="eyebrow">Bernio · výukové materiály</div>
       <h1>Přípravy</h1>
-      <p class="lead">Přehled příprav z matematiky a fyziky. Vyhledej téma, vyber předmět nebo ročník a otevři aktuální materiály přímo z OneDrivu.</p>
+      <p class="lead">Přehled příprav z matematiky a fyziky. Vyhledej téma, vyber předmět nebo ročník a otevři aktuální materiály a interaktivní kapitoly.</p>
     </header>
 
     <main>
@@ -81,11 +81,20 @@
       <section class="grid" id="grid" aria-label="Seznam příprav"></section>
     </main>
 
-    <footer>Bernio.cz · materiály se otevírají z veřejně sdílených složek OneDrive</footer>
+    <footer>Bernio.cz · materiály z OneDrivu a interaktivní kapitoly</footer>
   </div>
 
   <script>
     const preparations = [
+      {
+        order: 11,
+        title: "Polovodiče typu N a P – polovodičová dioda",
+        subject: "Fyzika",
+        grade: "9. ZŠ",
+        description: "Interaktivní zápis, animace krystalové mřížky, simulace diody, měření voltampérové charakteristiky a procvičování.",
+        tags: ["polovodiče", "dioda", "elektrický proud", "přechod PN", "interaktivní"],
+        url: "./polovodice/index.html", interactive: true
+      },
       {
         order: 1,
         title: "01 – Fyzikální jednotky",
@@ -201,7 +210,7 @@
     function card(item){
       const subjectClass = item.subject === "Matematika" ? " math" : "";
       const tags = (item.tags||[]).map(tag=>`<span class="tag">${escapeHtml(tag)}</span>`).join("");
-      return `<article class="card"><div class="card-top"><span class="subject${subjectClass}">${escapeHtml(item.subject)}</span><span class="grade">${escapeHtml(item.grade)}</span></div><h2>${escapeHtml(item.title)}</h2><p class="meta">${escapeHtml(item.description)}</p><div class="tags">${tags}</div><div class="actions"><a class="open" href="${item.url}" target="_blank" rel="noopener noreferrer">Otevřít složku<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 17 17 7"></path><path d="M7 7h10v10"></path></svg></a></div></article>`;
+      return `<article class="card"><div class="card-top"><span class="subject${subjectClass}">${escapeHtml(item.subject)}</span><span class="grade">${escapeHtml(item.grade)}</span></div><h2>${escapeHtml(item.title)}</h2><p class="meta">${escapeHtml(item.description)}</p><div class="tags">${tags}</div><div class="actions"><a class="open" href="${item.url}" target="_blank" rel="noopener noreferrer">${item.interactive ? "Otevřít kapitolu" : "Otevřít složku"}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 17 17 7"></path><path d="M7 7h10v10"></path></svg></a></div></article>`;
     }
     function render(){
       const items = filteredItems();
